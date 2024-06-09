@@ -23,7 +23,7 @@ from sklearn.compose import ColumnTransformer
 
 
 
-df = pd.read_csv('/content/drive/MyDrive/Mydrive/Accidentes de tránsito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig',delimiter=';' )
+df = pd.read_csv('data/Accidentes de tránsito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
 
 df.head()
 
