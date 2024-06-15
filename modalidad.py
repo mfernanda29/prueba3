@@ -11,10 +11,10 @@ from datetime import datetime
 
 # Intentar cargar el archivo CSV correctamente
 try:
-    df_ACC_TRA = pd.read_csv('data/Accidentes_de_tránsito_en_carreteras-2020-2021-Sutran.csv', encoding='utf8', delimiter=';')
+    df_ACC_TRA = pd.read_csv('Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv', encoding='utf8', delimiter=';')
     print("Archivo cargado correctamente.")
 except FileNotFoundError:
-    print("Error: El archivo 'data/Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv' no se encontró.")
+    print("Error: El archivo 'Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv' no se encontró.")
     df_ACC_TRA = None
 except Exception as e:
     print(f"Se produjo un error al cargar el archivo: {e}")
@@ -89,6 +89,3 @@ if df_ACC_TRA is not None:
     print(df_ACC_TRA.head(100).to_string(index=False))
 else:
     print("El procesamiento de datos no puede continuar porque el archivo no se cargó correctamente.")
-
-    print("El procesamiento de datos no puede continuar porque el archivo no se cargó correctamente.")
-
