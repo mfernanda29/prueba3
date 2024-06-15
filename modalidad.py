@@ -11,7 +11,7 @@ from datetime import datetime
 
 # Intentar cargar el archivo CSV correctamente
 try:
-    df_ACC_TRA = pd.read_csv('data/Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv', encoding='utf8', delimiter=';')
+    df_ACC_TRA = pd.read_csv('data/Accidentes_de_tránsito_en_carreteras-2020-2021-Sutran.csv', encoding='utf8', delimiter=';')
     print("Archivo cargado correctamente.")
 except FileNotFoundError:
     print("Error: El archivo 'data/Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv' no se encontró.")
