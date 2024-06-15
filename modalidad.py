@@ -10,18 +10,18 @@ from sklearn.compose import ColumnTransformer
 from datetime import datetime
 
 # Intentar cargar el archivo CSV correctamente
-file_path = 'data/Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv'
-
 try:
-    df_ACC_TRA = pd.read_csv(file_path, encoding='utf8', delimiter=';')
+    df_ACC_TRA = pd.read_csv('data/Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv', encoding='utf8', delimiter=';')
     print("Archivo cargado correctamente.")
 except FileNotFoundError:
-    print(f"Error: El archivo '{file_path}' no se encontró.")
+    print("Error: El archivo 'data/Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv' no se encontró.")
+    df_ACC_TRA = None
 except Exception as e:
     print(f"Se produjo un error al cargar el archivo: {e}")
+    df_ACC_TRA = None
 
 # Si el archivo se carga correctamente, continúa con el procesamiento
-if 'df_ACC_TRA' in locals():
+if df_ACC_TRA is not None:
     columnaCodigoVia = []
 
     # Configuración de pandas para mostrar todas las columnas y ajustar el ancho
@@ -88,5 +88,7 @@ if 'df_ACC_TRA' in locals():
     print("\nVista del DataFrame después de One-Hot Encoding:")
     print(df_ACC_TRA.head(100).to_string(index=False))
 else:
+    print("El procesamiento de datos no puede continuar porque el archivo no se cargó correctamente.")
+
     print("El procesamiento de datos no puede continuar porque el archivo no se cargó correctamente.")
 
