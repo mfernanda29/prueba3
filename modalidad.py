@@ -5,11 +5,12 @@ import io
 from sklearn.pipeline import Pipeline
 from sklearn import preprocessing
 from sklearn.base import TransformerMixin
-from sklearn.preprocessing import RobustScaler, OneHotEncoder
+from sklearn.preprocessing import RobustScaler, OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from datetime import datetime
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder
 from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 
 # Leer el archivo CSV
 df_ACC_TRA = pd.read_csv('data/Accidentes de transito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
@@ -105,9 +106,6 @@ def procesar_datos():
 
 procesar_datos()
 
-# Mostrar las primeras 100 filas para verificar el resultado final
-print("\nVista del DataFrame después de todas las transformaciones:")
-print(df_ACC_TRA.head(100).to_string(index=False))
 # Normalización de los datos
 scaler = StandardScaler()
 df_scaled = scaler.fit_transform(df_ACC_TRA)
@@ -129,3 +127,7 @@ plt.xlabel('Número de clusters')
 plt.ylabel('SSE (Inercia)')
 plt.title('Método del codo')
 plt.show()
+
+# Mostrar las primeras 100 filas para verificar el resultado final
+print("\nVista del DataFrame después de todas las transformaciones:")
+print(df_ACC_TRA.head(100).to_string(index=False))
