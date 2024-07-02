@@ -59,23 +59,23 @@ def procesar_datos():
     df_ACC_TRA["HORA_MINUTOS"] = df_ACC_TRA["HORA"].apply(convertir_horas_a_minutos)
 
     # Realizar One-Hot encoding para la hora en minutos, con esto tendremos separados la hora en diferentes categorias
-    df_ACC_TRA["HORA_N.I."] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
-                                                    bins = [-2, 0, 360, 720, 1140, 1440],
-                                                    labels = [1, 0, 0, 0, 0],ordered=False)
-    df_ACC_TRA["HORA_TEMPRANO"] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
-                                                    bins = [-2, 0, 360, 720, 1140, 1440],
-                                                    labels = [0, 0, 1, 0, 0],ordered=False)
-    df_ACC_TRA["HORA_TARDE"] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
-                                                    bins = [-2, 0, 360, 720, 1140, 1440],
-                                                    labels = [0, 0, 0, 1, 0],ordered=False)
-    df_ACC_TRA["HORA_NOCHE"] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
-                                                    bins = [-2, 0, 360, 720, 1140, 1440],
-                                                    labels = [0, 0, 0, 0, 1], ordered=False)
-    df_ACC_TRA["HORA_MADRUGADA"] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
-                                                    bins = [-2, 0, 360, 720, 1140, 1440],
-                                                    labels = [0, 1, 0, 0, 0], ordered=False)
+    df_ACC_TRA["HORA_N.I."] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
+                                     bins=[-2, 0, 360, 720, 1140, 1440],
+                                     labels=[1, 0, 0, 0, 0], ordered=False)
+    df_ACC_TRA["HORA_TEMPRANO"] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
+                                         bins=[-2, 0, 360, 720, 1140, 1440],
+                                         labels=[0, 0, 1, 0, 0], ordered=False)
+    df_ACC_TRA["HORA_TARDE"] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
+                                      bins=[-2, 0, 360, 720, 1140, 1440],
+                                      labels=[0, 0, 0, 1, 0], ordered=False)
+    df_ACC_TRA["HORA_NOCHE"] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
+                                      bins=[-2, 0, 360, 720, 1140, 1440],
+                                      labels=[0, 0, 0, 0, 1], ordered=False)
+    df_ACC_TRA["HORA_MADRUGADA"] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
+                                          bins=[-2, 0, 360, 720, 1140, 1440],
+                                          labels=[0, 1, 0, 0, 0], ordered=False)
     # Eliminamos los campos innecesarios como Hora y hora minutos
-    df_ACC_TRA.drop(columns = ['HORA','HORA_MINUTOS'], inplace=True)
+    df_ACC_TRA.drop(columns=['HORA', 'HORA_MINUTOS'], inplace=True)
 
     # Almacenar en una lista los registros del código de vía sin repetir los datos
     columnaCodigoVia = list(df_ACC_TRA['CODIGO_VÍA'].value_counts().index)
@@ -108,7 +108,7 @@ procesar_datos()
 
 # Normalización de los datos
 scaler = StandardScaler()
-df_scaled = scaler.fit_transform(df_ACC_TRA)
+df_scaled = scaler.fit_transform(df_ACC_TRA.select_dtypes(include=[np.number]))
 
 # Mostrar las primeras 5 filas del DataFrame procesado
 print("DataFrame procesado:")
