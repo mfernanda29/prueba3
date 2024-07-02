@@ -10,8 +10,12 @@ from sklearn.compose import ColumnTransformer
 from datetime import datetime
 from sklearn.preprocessing import LabelEncoder
 
+# Leer el archivo CSV
 df_ACC_TRA = pd.read_csv('data/Accidentes de transito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
 
+# Imprimir los nombres de las columnas para verificar que 'CODIGO_VIA' existe
+print("Columnas en el DataFrame:")
+print(df_ACC_TRA.columns)
 
 columnaCodigoVia = []
 
@@ -22,10 +26,6 @@ pd.set_option('display.width', 1000)
 # Mostrar las primeras 5 filas del DataFrame
 print("Primera vista del DataFrame original:")
 print(df_ACC_TRA.head(100).to_string(index=False))
-
-# Configuración de pandas para mostrar todas las columnas y ajustar el ancho
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', 1000)
 
 # Definir las columnas a eliminar basándonos en los nombres exactos impresos
 DROP_COLUMNS = ['FECHA_CORTE', 'FECHA']
@@ -48,8 +48,11 @@ def convertir_horas_a_minutos(tiempo):
 
 def procesar_datos():
     global df_ACC_TRA, columnaCodigoVia
-    
 
+    # Verificar si la columna 'CODIGO_VIA' existe
+    if 'CODIGO_VIA' not in df_ACC_TRA.columns:
+        raise KeyError("La columna 'CODIGO_VIA' no se encuentra en el DataFrame")
+    
     # Crear nueva columna de hora en minutos 
     df_ACC_TRA["HORA_MINUTOS"] = df_ACC_TRA["HORA"].apply(convertir_horas_a_minutos)
 
