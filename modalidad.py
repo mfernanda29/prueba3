@@ -105,26 +105,35 @@ procesar_datos()
 print("\nVista del DataFrame después de todas las transformaciones:")
 print(df_ACC_TRA.head(100).to_string(index=False))
 
-# Normalización de los datos
-scaler = StandardScaler()
-df_scaled = scaler.fit_transform(df_ACC_TRA.select_dtypes(include=[np.number]))
+# Escalar los datos
+scaler = RobustScaler()
+df_scaled = scaler.fit_transform(df_ACC_TRA)
 
-# Mostrar las primeras 5 filas del DataFrame procesado
-print("DataFrame procesado:")
-print(df_ACC_TRA.head(100).to_string(index=False))
+# Método del codo para encontrar el número óptimo de clusters
+inertia = []
+silhouette_scores = []
+K = range(2, 11)
 
-# Determinar el número óptimo de clusters utilizando el método del codo
-sse = []
-for k in range(1, 11):
-    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)  # Aquí se agrega el valor explícito de n_init
+for k in K:
+    kmeans = KMeans(n_clusters=k, random_state=42)
     kmeans.fit(df_scaled)
-    sse.append(kmeans.inertia_)
+    inertia.append(kmeans.inertia_)
+    silhouette_scores.append(silhouette_score(df_scaled, kmeans.labels_))
 
+# Graficar el método del codo
 plt.figure(figsize=(10, 5))
-plt.plot(range(1, 11), sse, marker='o')
-plt.xlabel('Número de clusters')
-plt.ylabel('SSE (Inercia)')
-plt.title('Método del codo')
-plt.savefig('metodo_del_codo.png')  # Guardar la imagen
+plt.plot(K, inertia, 'bx-')
+plt.xlabel('Número de clusters (k)')
+plt.ylabel('Inercia')
+plt.title('Método del codo para encontrar el número óptimo de clusters')
 plt.show()
+
+# Graficar la puntuación de la silueta
+plt.figure(figsize=(10, 5))
+plt.plot(K, silhouette_scores, 'bx-')
+plt.xlabel('Número de clusters (k)')
+plt.ylabel('Puntuación de la silueta')
+plt.title('Análisis de la silueta para encontrar el número óptimo de clusters')
+plt.show()
+
 
