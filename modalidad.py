@@ -9,7 +9,6 @@ from sklearn.preprocessing import RobustScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from datetime import datetime
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
 # Leer el archivo CSV
