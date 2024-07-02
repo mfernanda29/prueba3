@@ -12,7 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from sklearn.metrics import silhouette_score
-# Leer el archivo CSV
+
 df_ACC_TRA = pd.read_csv('data/Accidentes de transito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
 
 columnaCodigoVia = []
@@ -51,30 +51,31 @@ def convertir_horas_a_minutos(tiempo):
 def procesar_datos():
     global df_ACC_TRA, columnaCodigoVia
     
+
     # Crear nueva columna de hora en minutos 
     df_ACC_TRA["HORA_MINUTOS"] = df_ACC_TRA["HORA"].apply(convertir_horas_a_minutos)
 
     # Realizar One-Hot encoding para la hora en minutos, con esto tendremos separados la hora en diferentes categorias
-    df_ACC_TRA["HORA_N.I."] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
-                                     bins=[-2, 0, 360, 720, 1140, 1440],
-                                     labels=[1, 0, 0, 0, 0], ordered=False)
-    df_ACC_TRA["HORA_TEMPRANO"] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
-                                         bins=[-2, 0, 360, 720, 1140, 1440],
-                                         labels=[0, 0, 1, 0, 0], ordered=False)
-    df_ACC_TRA["HORA_TARDE"] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
-                                      bins=[-2, 0, 360, 720, 1140, 1440],
-                                      labels=[0, 0, 0, 1, 0], ordered=False)
-    df_ACC_TRA["HORA_NOCHE"] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
-                                      bins=[-2, 0, 360, 720, 1140, 1440],
-                                      labels=[0, 0, 0, 0, 1], ordered=False)
-    df_ACC_TRA["HORA_MADRUGADA"] = pd.cut(df_ACC_TRA["HORA_MINUTOS"],
-                                          bins=[-2, 0, 360, 720, 1140, 1440],
-                                          labels=[0, 1, 0, 0, 0], ordered=False)
+    df_ACC_TRA["HORA_N.I."] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
+                                                    bins = [-2, 0, 360, 720, 1140, 1440],
+                                                    labels = [1, 0, 0, 0, 0],ordered=False)
+    df_ACC_TRA["HORA_TEMPRANO"] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
+                                                    bins = [-2, 0, 360, 720, 1140, 1440],
+                                                    labels = [0, 0, 1, 0, 0],ordered=False)
+    df_ACC_TRA["HORA_TARDE"] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
+                                                    bins = [-2, 0, 360, 720, 1140, 1440],
+                                                    labels = [0, 0, 0, 1, 0],ordered=False)
+    df_ACC_TRA["HORA_NOCHE"] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
+                                                    bins = [-2, 0, 360, 720, 1140, 1440],
+                                                    labels = [0, 0, 0, 0, 1], ordered=False)
+    df_ACC_TRA["HORA_MADRUGADA"] = pd.cut(x = df_ACC_TRA["HORA_MINUTOS"],
+                                                    bins = [-2, 0, 360, 720, 1140, 1440],
+                                                    labels = [0, 1, 0, 0, 0], ordered=False)
     # Eliminamos los campos innecesarios como Hora y hora minutos
-    df_ACC_TRA.drop(columns=['HORA', 'HORA_MINUTOS'], inplace=True)
+    df_ACC_TRA.drop(columns = ['HORA','HORA_MINUTOS'], inplace=True)
 
     # Almacenar en una lista los registros del código de vía sin repetir los datos
-    columnaCodigoVia = list(df_ACC_TRA['CODIGO_VÍA'].value_counts().index)
+    columnaCodigoVia = list(df_ACC_TRA['CODIGO_VIA'].value_counts().index)
 
     # Eliminar registros que sean duplicados
     df_ACC_TRA = df_ACC_TRA.drop_duplicates() if df_ACC_TRA.duplicated().any() else df_ACC_TRA
@@ -83,7 +84,7 @@ def procesar_datos():
     diccionario_codigo_via = {element: index + 1 for index, element in enumerate(columnaCodigoVia)}
 
     # Convertir la columna de CODIGO_VÍA que está en cadena en un label encoded data
-    df_ACC_TRA["CODIGO_VÍA"] = df_ACC_TRA["CODIGO_VÍA"].map(diccionario_codigo_via)
+    df_ACC_TRA["CODIGO_VIA"] = df_ACC_TRA["CODIGO_VIA"].map(diccionario_codigo_via)
 
     # Existencias de departamentos en minúsculas, por lo que forzamos las mayúsculas
     df_ACC_TRA['DEPARTAMENTO'] = df_ACC_TRA['DEPARTAMENTO'].str.upper()
@@ -101,39 +102,26 @@ def procesar_datos():
             df_ACC_TRA[column] = df_ACC_TRA[column].astype(int)
 
 procesar_datos()
+
 # Mostrar las primeras 100 filas para verificar el resultado final
 print("\nVista del DataFrame después de todas las transformaciones:")
 print(df_ACC_TRA.head(100).to_string(index=False))
 
-# Escalar los datos
-scaler = RobustScaler()
-df_scaled = scaler.fit_transform(df_ACC_TRA)
+# Normalización de los datos
+scaler = StandardScaler()
+df_scaled = scaler.fit_transform(df_ACC_TRA.select_dtypes(include=[np.number]))
 
-# Método del codo para encontrar el número óptimo de clusters
-inertia = []
-silhouette_scores = []
-K = range(2, 11)
-
-for k in K:
-    kmeans = KMeans(n_clusters=k, random_state=42)
+# Determinar el número óptimo de clusters utilizando el método del codo
+sse = []
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)  # Aquí se agrega el valor explícito de n_init
     kmeans.fit(df_scaled)
-    inertia.append(kmeans.inertia_)
-    silhouette_scores.append(silhouette_score(df_scaled, kmeans.labels_))
+    sse.append(kmeans.inertia_)
 
-# Graficar el método del codo
 plt.figure(figsize=(10, 5))
-plt.plot(K, inertia, 'bx-')
-plt.xlabel('Número de clusters (k)')
-plt.ylabel('Inercia')
-plt.title('Método del codo para encontrar el número óptimo de clusters')
+plt.plot(range(1, 11), sse, marker='o')
+plt.xlabel('Número de clusters')
+plt.ylabel('SSE (Inercia)')
+plt.title('Método del codo')
+plt.savefig('metodo_del_codo.png')  # Guardar la imagen
 plt.show()
-
-# Graficar la puntuación de la silueta
-plt.figure(figsize=(10, 5))
-plt.plot(K, silhouette_scores, 'bx-')
-plt.xlabel('Número de clusters (k)')
-plt.ylabel('Puntuación de la silueta')
-plt.title('Análisis de la silueta para encontrar el número óptimo de clusters')
-plt.show()
-
-
