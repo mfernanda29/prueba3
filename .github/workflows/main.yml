@@ -19,10 +19,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pandas sklearn matplotlib
+        pip install pandas scikit-learn matplotlib
 
     - name: List files in data directory
       run: ls -la data  # Esto lista los archivos en el directorio data para verificar
 
     - name: Run script
       run: python modalidad.py
+
