@@ -8,10 +8,10 @@ jobs:
 
     steps:
     - name: Checkout repository content
-      uses: actions/checkout@v4  # Actualizado a la última versión
+      uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v4  # Actualizado a la última versión
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
 
@@ -26,4 +26,8 @@ jobs:
     - name: Run script
       run: python modalidad.py
 
-
+    - name: Upload image artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: metodo-del-codo
+        path: metodo_del_codo.png
