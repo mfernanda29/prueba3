@@ -4,15 +4,14 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository content
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4  # Actualizado a la última versión
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4  # Actualizado a la última versión
       with:
         python-version: 3.8
 
@@ -26,4 +25,5 @@ jobs:
 
     - name: Run script
       run: python modalidad.py
+
 
