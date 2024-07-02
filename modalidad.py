@@ -126,6 +126,7 @@ plt.plot(range(1, 11), sse, marker='o')
 plt.xlabel('Número de clusters')
 plt.ylabel('SSE (Inercia)')
 plt.title('Método del codo')
+plt.savefig('metodo_del_codo.png')  # Guardar la imagen
 plt.show()
 
 # Mostrar las primeras 100 filas para verificar el resultado final
