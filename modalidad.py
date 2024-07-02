@@ -117,7 +117,7 @@ print(df_ACC_TRA.head(100).to_string(index=False))
 # Determinar el número óptimo de clusters utilizando el método del codo
 sse = []
 for k in range(1, 11):
-    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)  # Aquí se agrega el valor explícito de n_init
     kmeans.fit(df_scaled)
     sse.append(kmeans.inertia_)
 
