@@ -10,7 +10,8 @@ from sklearn.compose import ColumnTransformer
 from datetime import datetime
 from sklearn.preprocessing import LabelEncoder
 
-df_ACC_TRA = pd.read_csv('data/Accidentes_de_transito_en_carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
+df_ACC_TRA = pd.read_csv('data/Accidentes de transito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
+
 
 columnaCodigoVia = []
 
