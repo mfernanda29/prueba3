@@ -1,9 +1,10 @@
-name: Run Python Script
+name: Python application
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
-  run-script:
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +18,11 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install pandas numpy scikit-learn
+        python -m pip install --upgrade pip
+        pip install pandas sklearn matplotlib
+
+    - name: List files in data directory
+      run: ls -la data  # Esto lista los archivos en el directorio data para verificar
 
     - name: Run script
       run: python modalidad.py
