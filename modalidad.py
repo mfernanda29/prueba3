@@ -15,10 +15,6 @@ import matplotlib.pyplot as plt
 # Leer el archivo CSV
 df_ACC_TRA = pd.read_csv('data/Accidentes de transito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
 
-# Imprimir los nombres de las columnas para verificar que 'CODIGO_VÍA' existe
-print("Columnas en el DataFrame:")
-print(df_ACC_TRA.columns)
-
 columnaCodigoVia = []
 
 # Configuración de pandas para mostrar todas las columnas y ajustar el ancho
@@ -28,6 +24,10 @@ pd.set_option('display.width', 1000)
 # Mostrar las primeras 5 filas del DataFrame
 print("Primera vista del DataFrame original:")
 print(df_ACC_TRA.head(100).to_string(index=False))
+
+# Configuración de pandas para mostrar todas las columnas y ajustar el ancho
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 1000)
 
 # Definir las columnas a eliminar basándonos en los nombres exactos impresos
 DROP_COLUMNS = ['FECHA_CORTE', 'FECHA']
@@ -50,10 +50,6 @@ def convertir_horas_a_minutos(tiempo):
 
 def procesar_datos():
     global df_ACC_TRA, columnaCodigoVia
-
-    # Verificar si la columna 'CODIGO_VÍA' existe
-    if 'CODIGO_VÍA' not in df_ACC_TRA.columns:
-        raise KeyError("La columna 'CODIGO_VÍA' no se encuentra en el DataFrame")
     
     # Crear nueva columna de hora en minutos 
     df_ACC_TRA["HORA_MINUTOS"] = df_ACC_TRA["HORA"].apply(convertir_horas_a_minutos)
@@ -105,6 +101,9 @@ def procesar_datos():
             df_ACC_TRA[column] = df_ACC_TRA[column].astype(int)
 
 procesar_datos()
+# Mostrar las primeras 100 filas para verificar el resultado final
+print("\nVista del DataFrame después de todas las transformaciones:")
+print(df_ACC_TRA.head(100).to_string(index=False))
 
 # Normalización de los datos
 scaler = StandardScaler()
@@ -129,6 +128,3 @@ plt.title('Método del codo')
 plt.savefig('metodo_del_codo.png')  # Guardar la imagen
 plt.show()
 
-# Mostrar las primeras 100 filas para verificar el resultado final
-print("\nVista del DataFrame después de todas las transformaciones:")
-print(df_ACC_TRA.head(100).to_string(index=False))
