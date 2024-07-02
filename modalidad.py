@@ -11,7 +11,7 @@ from datetime import datetime
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
-
+from sklearn.metrics import silhouette_score
 # Leer el archivo CSV
 df_ACC_TRA = pd.read_csv('data/Accidentes de transito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
 
