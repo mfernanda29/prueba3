@@ -13,7 +13,7 @@ from sklearn.preprocessing import LabelEncoder
 # Leer el archivo CSV
 df_ACC_TRA = pd.read_csv('data/Accidentes de transito en carreteras-2020-2021-Sutran.csv', encoding='utf-8-sig', delimiter=';')
 
-# Imprimir los nombres de las columnas para verificar que 'CODIGO_VIA' existe
+# Imprimir los nombres de las columnas para verificar que 'CODIGO_VÍA' existe
 print("Columnas en el DataFrame:")
 print(df_ACC_TRA.columns)
 
@@ -49,9 +49,9 @@ def convertir_horas_a_minutos(tiempo):
 def procesar_datos():
     global df_ACC_TRA, columnaCodigoVia
 
-    # Verificar si la columna 'CODIGO_VIA' existe
-    if 'CODIGO_VIA' not in df_ACC_TRA.columns:
-        raise KeyError("La columna 'CODIGO_VIA' no se encuentra en el DataFrame")
+    # Verificar si la columna 'CODIGO_VÍA' existe
+    if 'CODIGO_VÍA' not in df_ACC_TRA.columns:
+        raise KeyError("La columna 'CODIGO_VÍA' no se encuentra en el DataFrame")
     
     # Crear nueva columna de hora en minutos 
     df_ACC_TRA["HORA_MINUTOS"] = df_ACC_TRA["HORA"].apply(convertir_horas_a_minutos)
@@ -76,7 +76,7 @@ def procesar_datos():
     df_ACC_TRA.drop(columns = ['HORA','HORA_MINUTOS'], inplace=True)
 
     # Almacenar en una lista los registros del código de vía sin repetir los datos
-    columnaCodigoVia = list(df_ACC_TRA['CODIGO_VIA'].value_counts().index)
+    columnaCodigoVia = list(df_ACC_TRA['CODIGO_VÍA'].value_counts().index)
 
     # Eliminar registros que sean duplicados
     df_ACC_TRA = df_ACC_TRA.drop_duplicates() if df_ACC_TRA.duplicated().any() else df_ACC_TRA
@@ -85,7 +85,7 @@ def procesar_datos():
     diccionario_codigo_via = {element: index + 1 for index, element in enumerate(columnaCodigoVia)}
 
     # Convertir la columna de CODIGO_VÍA que está en cadena en un label encoded data
-    df_ACC_TRA["CODIGO_VIA"] = df_ACC_TRA["CODIGO_VIA"].map(diccionario_codigo_via)
+    df_ACC_TRA["CODIGO_VÍA"] = df_ACC_TRA["CODIGO_VÍA"].map(diccionario_codigo_via)
 
     # Existencias de departamentos en minúsculas, por lo que forzamos las mayúsculas
     df_ACC_TRA['DEPARTAMENTO'] = df_ACC_TRA['DEPARTAMENTO'].str.upper()
@@ -107,3 +107,4 @@ procesar_datos()
 # Mostrar las primeras 100 filas para verificar el resultado final
 print("\nVista del DataFrame después de todas las transformaciones:")
 print(df_ACC_TRA.head(100).to_string(index=False))
+
